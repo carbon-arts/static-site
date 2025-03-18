@@ -13,13 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
 
       - name: SSH into machine and update node1
         run: |
-          ssh ubuntu@${{ secrets.SERVER_IP }} "cd /path/to/your/repo && git pull origin main"
+          ssh ubuntu@${{ secrets.SERVER_IP }} "cd /home/netstratum/Docker/loadbalance/site && git pull origin main"
