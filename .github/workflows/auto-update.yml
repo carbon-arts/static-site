@@ -1,20 +1,13 @@
-name: Update files on push
+name: Update resources
 on: [push]
 jobs:
-  update-files:
+  resources:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Modify the specific files
-      uses: jaywcjlove/github-action-modify-file-content@main
+    - name: Update resources
+      uses: test-room-7/action-update-file@v1
       with:
-        path: /home/netstratum/Docker/loadbalance/site/node1
-        body: "Your new content"
-        overwrite: 'true'
-    - name: Commit and push changes
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add -A
-        git commit -m "Update file on push"
-        git push
+        file-path: /home/netstratum/Docker/loadbalance/site/node1
+        commit-msg: "Update file on push"
+        github-token: ${{ secrets.GITHUB_TOKEN }}
