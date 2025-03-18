@@ -1,13 +1,25 @@
-name: Update resources
-on: [push]
+name: Auto Update node1 on Machine
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  resources:
+  update-node1:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Update resources
-      uses: test-room-7/action-update-file@v1
-      with:
-        file-path: /home/netstratum/Docker/loadbalance/site/node1
-        commit-msg: "Update file on push"
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: SSH into machine and update node1
+        run: |
+          ssh ubuntu@${{ secrets.SERVER_IP }} "cd /path/to/your/repo && git pull origin main"
